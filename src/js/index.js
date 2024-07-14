@@ -24,26 +24,34 @@ function bmiCalculate(mass, height) {
 function bmiClassification(bmi) {
     if (bmi < 18.5) return ` Kg/m2 - ❌ Abaixo do peso`;
     else if (bmi >= 18.5 && bmi < 25) return ` Kg/m2 - ✅ Peso normal`;
-    else if (bmi >= 25 && bmi < 30) return  ` Kg/m2 - ⚠️ Sobrepeso`;
+    else if (bmi >= 25 && bmi < 30) return ` Kg/m2 - ⚠️ Sobrepeso`;
     else if (bmi > 30) return ` Kg/m2 - ❌ Obesidade`;
 };
 
 /** Valida os campos de 'peso' e 'altura' retornando 'true' quando ambos campos estiverem com valores adequados */
 function validateData() {
-    let mass = parseFloat(htmlElements.inputMass.value);
-    let height = parseFloat(htmlElements.inputHeight.value);
+    let mass = parseFloat(htmlElements.inputMass.value.trim());
+    let height = parseFloat(htmlElements.inputHeight.value.trim());
 
-    // Verifica se foi setado valor
-    if (!mass) {
-        htmlElements.messageMass.innerText = 'Insira um valor numérico. Ex.: 50.75';
+    const massRegex = /^\d{1,2}\.?\d{1,2}?$/; // define o padrão do peso
+    const heightRegex = /^\d\.\d{1,2}$/; // define o padrão da altura
+
+    // Verifica se foi setado valor e se ele corresponde ao formato esperado
+    if (!massRegex.test(mass)) {
+        htmlElements.messageMass.innerText = 'Insira um valor de peso no formato correto. Ex.: 50.75';
         return false;
     } else htmlElements.messageMass.innerText = '';
 
-    // Verifica se foi setado valor
-    if (!height) {
-        htmlElements.messageHeight.innerText = 'Insira um valor numérico. Ex.: 1.72';
+    // Verifica se foi setado valor e se ele corresponde ao formato esperado
+    if (!heightRegex.test(height)) {
+        htmlElements.messageHeight.innerText = 'Insira um valor de altura no formato correto. Ex.: 1.75';
         return false;
     } else htmlElements.messageHeight.innerText = '';
+
+    if (mass < height || mass < 45) {
+        alert("⚠️ Peso não pode ter valor menor do que altura!\n⚠️ O peso mínimo para cálculo é 45 kg.");
+        return;
+    }
 
     return true;
 };
